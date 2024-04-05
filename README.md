@@ -4,6 +4,8 @@ Title: The Cosmic Ballet: Simulating the Three-Body Problem
 
 Have you ever wondered how the stars dance across the night sky? While two-body systems (like the Earth and Sun) have predictable orbits, add just one more star, and things get a whole lot more chaotic! This project dives into the fascinating physics of the three-body problem and uses Python to create a beautiful visualization of their intricate motions.
 
+![Three Body Problem](./Figure_1.png)
+
 # My Motivation
 
 This project was my way of exploring several things I'm passionate about:
