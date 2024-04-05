@@ -25,6 +25,7 @@ This project was my way of exploring several things I'm passionate about:
 ## At the heart of our simulation lies Newton's Law of Gravitation. This equation describes the attractive force between any two objects with mass:
 
 F = G * (m1 * m2) / r**2
+
 F: Force of gravity
 G: The universal gravitational constant
 m1, m2: Masses of the two objects
