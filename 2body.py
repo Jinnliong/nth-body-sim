@@ -95,11 +95,20 @@ ax = fig.add_subplot(111, projection="3d")
 #ax.scatter(r2_sol[-1, 0], r2_sol[-1, 1], r2_sol[-1, 2], color="tab:red", marker="o", s=100, label="Alpha Centauri B")
 
 # Add labels and title
+fig.patch.set_facecolor('black')
 ax.set_xlabel("x-coordinate", fontsize=14)
 ax.set_ylabel("y-coordinate", fontsize=14)
 ax.set_zlabel("z-coordinate", fontsize=14)
 ax.set_title("Visualization of orbits of stars in a two-body system\n", fontsize=14)
+ax.title.set_color('white')
+ax.xaxis.label.set_color('white')
+ax.yaxis.label.set_color('white')
+ax.zaxis.label.set_color('white')
+ax.tick_params(colors='white')
 ax.legend(loc="upper left", fontsize=14)
+
+# Change the plot background color to black
+ax.set_facecolor('black')
 
 # Lines to represent the orbits (initialize with empty data)
 line1, = ax.plot([], [], [], color="darkblue", label="Alpha Centauri A")
@@ -155,9 +164,9 @@ ani = animation.FuncAnimation(fig, animate, frames=len(time_span), interval=20, 
 # Add the legend
 ax.legend()
 
-# Display the animation
-plt.show()
-
 # Save the animation
 ani.save("C:/Users/aloha/OneDrive/Data/nth-body-sim/two_body_simulation.gif", writer=PillowWriter(fps=24))
 print("GIF Save Attempted")
+
+# Display the animation
+plt.show()

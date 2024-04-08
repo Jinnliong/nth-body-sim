@@ -4,7 +4,9 @@ Title: The Cosmic Ballet: Simulating the Three-Body Problem
 
 Have you ever wondered how the stars dance across the night sky? While two-body systems (like the Earth and Sun) have predictable orbits, add just one more star, and things get a whole lot more chaotic! This project dives into the fascinating physics of the three-body problem and uses Python to create a beautiful visualization of their intricate motions.
 
-![Three Body Problem](./3body.png)
+![Stable Two Body](./2bodysim.png)
+
+![Three Body Problem](./3bodysim.png)
 
 # My Motivation
 
@@ -52,7 +54,9 @@ The Equations of Motion
 
 ## Running the Simulation
 
-It's simple!  Just execute the Python script, and the animated dance of the three stars will appear before your eyes.  The three_body_simulation.gif will save the cosmic ballet for you to enjoy.
+It's simple!  Just execute the Python script, and the animated dance of the three stars will appear before your eyes.  The two_body_simulation.gif and the three_body_simulation.gif will save the cosmic ballet for you to enjoy.
+
+![Two Body Simulation](./two_body_simulation.gif)
 
 ![Three Body Simulation](./three_body_simulation.gif)
 

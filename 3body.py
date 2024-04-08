@@ -5,7 +5,6 @@ from mpl_toolkits.mplot3d import Axes3D  # For 3D plots
 from matplotlib import animation  # For creating animations
 from matplotlib.animation import PillowWriter
 
-
 # Constants and Initial Conditions
 
 # Define universal gravitation constant
@@ -116,11 +115,20 @@ ax = fig.add_subplot(111, projection="3d")
 #ax.scatter(r3_sol[-1, 0], r3_sol[-1, 1], r3_sol[-1, 2], color="tab:green", marker="o", s=100, label="Third Celestial Body")
 
 # Add labels and title
+fig.patch.set_facecolor('black')
 ax.set_xlabel("x-coordinate", fontsize=14)
 ax.set_ylabel("y-coordinate", fontsize=14)
 ax.set_zlabel("z-coordinate", fontsize=14)
 ax.set_title("Visualization of orbits of stars in a three-body system\n", fontsize=14)
+ax.title.set_color('white')
+ax.xaxis.label.set_color('white')
+ax.yaxis.label.set_color('white')
+ax.zaxis.label.set_color('white')
+ax.tick_params(colors='white')
 ax.legend(loc="upper left", fontsize=14)
+
+# Change the plot background color to black
+ax.set_facecolor('black')
 
 # Lines to represent the orbits (initialize with empty data)
 line1, = ax.plot([], [], [], color="darkblue", label="Alpha Centauri A")
@@ -153,12 +161,11 @@ def init():
     ax.set_xlim(min_range, max_range)
     ax.set_ylim(min_range, max_range)
     ax.set_zlim(min_range, max_range) 
-
   
     return line1, line2, line3, star1, star2, star3
 
 def animate(i):
-    # Extract trajectories up to frame i
+     # Extract trajectories up to frame i
     x1, y1, z1 = r1_sol[:i, 0], r1_sol[:i, 1], r1_sol[:i, 2]
     x2, y2, z2 = r2_sol[:i, 0], r2_sol[:i, 1], r2_sol[:i, 2]
     x3, y3, z3 = r3_sol[:i, 0], r3_sol[:i, 1], r3_sol[:i, 2] 
@@ -187,9 +194,9 @@ ani = animation.FuncAnimation(fig, animate, frames=len(time_span), interval=20, 
 # Add the legend
 ax.legend()
 
-# Display the animation
-plt.show()
-
 # Save the animation
 ani.save("C:/Users/aloha/OneDrive/Data/nth-body-sim/three_body_simulation.gif", writer=PillowWriter(fps=24))
 print("GIF Save Attempted")
+
+# Display the animation
+plt.show()
