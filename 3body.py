@@ -187,9 +187,9 @@ ani = animation.FuncAnimation(fig, animate, frames=len(time_span), interval=20, 
 # Add the legend
 ax.legend()
 
+# Display the animation
+plt.show()
+
 # Save the animation
 ani.save("C:/Users/aloha/OneDrive/Data/nth-body-sim/three_body_simulation.gif", writer=PillowWriter(fps=24))
 print("GIF Save Attempted")
-
-# Display the animation
-plt.show()
