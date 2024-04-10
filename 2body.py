@@ -112,7 +112,7 @@ ax.set_facecolor('black')
 
 # Lines to represent the orbits (initialize with empty data)
 line1, = ax.plot([], [], [], color="darkblue", label="Alpha Centauri A")
-line2, = ax.plot([], [], [], color="tab:red", label="Alpha Centauri B")
+mercury, = ax.plot([], [], [], color="tab:red", label="Alpha Centauri B")
  
 # Scatter objects to represent stars
 star1, = ax.plot([], [], [], 'o', color="darkblue")
@@ -122,8 +122,8 @@ def init():
     # Initialize lines with empty data
     line1.set_data([], []) 
     line1.set_3d_properties([])
-    line2.set_data([], []) 
-    line2.set_3d_properties([])
+    mercury.set_data([], []) 
+    mercury.set_3d_properties([])
     star1.set_data([], [])
     star1.set_3d_properties([])
     star2.set_data([], [])
@@ -137,7 +137,7 @@ def init():
     ax.set_zlim(min_range, max_range) 
 
   
-    return line1, line2, star1, star2
+    return line1, mercury, star1, star2
 
 def animate(i):
     # Extract trajectories up to frame i
@@ -147,8 +147,8 @@ def animate(i):
     if x1.size > 0 and y1.size > 0 and z1.size > 0:  # Check if arrays have data
         line1.set_data(x1, y1)
         line1.set_3d_properties(z1)
-        line2.set_data(x2, y2)
-        line2.set_3d_properties(z2)
+        mercury.set_data(x2, y2)
+        mercury.set_3d_properties(z2)
 
         # Update star positions
         star1.set_data(x1[-1], y1[-1])
@@ -156,7 +156,7 @@ def animate(i):
         star2.set_data(x2[-1], y2[-1])
         star2.set_3d_properties(z2[-1])
 
-    return line1, line2, star1, star2
+    return line1, mercury, star1, star2
 
 # Create animation
 ani = animation.FuncAnimation(fig, animate, frames=len(time_span), interval=20, blit=True, init_func=init)

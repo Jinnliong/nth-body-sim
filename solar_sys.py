@@ -10,24 +10,29 @@ G = 6.674e-11  # Gravitational constant
 M_sun = 1.989e30  # Mass of the Sun
 
 # Mercury's orbital parameters
-a = 57.91e9  # Semi-major axis (meters)
-e = 0.2056  # Eccentricity
-T = 88 * 24 * 3600  # Orbital period (seconds)
+a_mercury = 57.91e9  # Semi-major axis (meters)
+e_mercury = 0.2056  # Eccentricity
+T_mercury = 88 * 24 * 3600  # Orbital period (seconds)
+
+# Venus Orbital Parameters
+a_venus = 108.2e9  # Semi-major axis (meters)
+e_venus = 0.0067  # Eccentricity
+T_venus = 225 * 24 * 3600  # Orbital period (seconds)
 
 # Function to calculate Mercury's position at a given time
 def calculate_position(t):
-    n = 2 * np.pi / T  # Mean motion
+    n = 2 * np.pi / T_mercury  # Mean motion
     M = n * t  # Mean anomaly
 
     # Solve Kepler's equation iteratively (for accuracy)
     E = M  
-    E_next = M + e * np.sin(E) 
+    E_next = M + e_mercury * np.sin(E) 
     while abs(E - E_next) > 1e-6: 
         E = E_next
-        E_next = M + e * np.sin(E)
+        E_next = M + e_mercury * np.sin(E)
 
-    true_anomaly = 2 * np.arctan2(np.sqrt(1 + e) * np.tan(E / 2), np.sqrt(1 - e))
-    r = a * (1 - e * np.cos(E))  
+    true_anomaly = 2 * np.arctan2(np.sqrt(1 + e_mercury) * np.tan(E / 2), np.sqrt(1 - e_mercury))
+    r = a_mercury * (1 - e_mercury * np.cos(E))  
 
     x = r * np.cos(true_anomaly)
     y = r * np.sin(true_anomaly)
@@ -59,8 +64,8 @@ ax.legend(loc="upper left", fontsize=14)
 ax.set_facecolor('black')
 
 # Lines to represent the orbits (initialize with empty data)
-line1, = ax.plot([], [], [], color="orange", label="Sun")
-line2, = ax.plot([], [], [], color="brown", label="Mercury")
+sun_path, = ax.plot([], [], [], color="orange", label="Sun")
+mercury_path, = ax.plot([], [], [], color="brown", label="Mercury")
 
 # Create representations of the Sun and Mercury 
 sun, = ax.plot([], [], [], 'o', color='orange')
@@ -73,20 +78,20 @@ mercury_z = []
 
 def init():
     # Initialize lines with empty data
-    line1.set_data([], []) 
-    line1.set_3d_properties([])
-    line2.set_data([], []) 
-    line2.set_3d_properties([])
+    sun_path.set_data([], []) 
+    sun_path.set_3d_properties([])
+    mercury_path.set_data([], []) 
+    mercury_path.set_3d_properties([])
     sun.set_data([], [])
     sun.set_3d_properties([])
     mercury.set_data([], [])
     mercury.set_3d_properties([])
 
-    return line1, line2, sun, mercury
+    return sun_path, mercury_path, sun, mercury
 
 # Animation function (called repeatedly)
 def animate(i):
-    x, y, z = calculate_position(i * T / 50)  # Update positions
+    x, y, z = calculate_position(i * T_mercury / 50)  # Update positions
 
     sun.set_data(0, 0)  
     sun.set_3d_properties(0) 
@@ -100,13 +105,13 @@ def animate(i):
     mercury_z.append(z)
 
     # Plot the orbit history 
-    line2.set_data(mercury_x, mercury_y)
-    line2.set_3d_properties(mercury_z)
+    mercury_path.set_data(mercury_x, mercury_y)
+    mercury_path.set_3d_properties(mercury_z)
 
     
-    ax.set_xlim(-1.5 * a, 1.5 * a) 
-    ax.set_ylim(-1.5 * a, 1.5 * a)
-    ax.set_zlim(-1.5 * a, 1.5 * a)
+    ax.set_xlim(-1.5 * a_mercury, 1.5 * a_mercury) 
+    ax.set_ylim(-1.5 * a_mercury, 1.5 * a_mercury)
+    ax.set_zlim(-1.5 * a_mercury, 1.5 * a_mercury)
 
     return sun, mercury
 
