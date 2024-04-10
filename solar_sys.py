@@ -19,24 +19,24 @@ a_venus = 108.2e9  # Semi-major axis (meters)
 e_venus = 0.0067  # Eccentricity
 T_venus = 225 * 24 * 3600  # Orbital period (seconds)
 
-# Function to calculate Mercury's position at a given time
-def calculate_position(t):
-    n = 2 * np.pi / T_mercury  # Mean motion
+# Function to calculate Solar system stars' position at a given time
+def calculate_position(t, a, e, T): 
+    n = 2 * np.pi / T  # Mean motion (specific to the planet)
     M = n * t  # Mean anomaly
 
-    # Solve Kepler's equation iteratively (for accuracy)
+    # Solve Kepler's equation iteratively 
     E = M  
-    E_next = M + e_mercury * np.sin(E) 
+    E_next = M + e * np.sin(E)  # Eccentricity of the planet
     while abs(E - E_next) > 1e-6: 
         E = E_next
-        E_next = M + e_mercury * np.sin(E)
+        E_next = M + e * np.sin(E)
 
-    true_anomaly = 2 * np.arctan2(np.sqrt(1 + e_mercury) * np.tan(E / 2), np.sqrt(1 - e_mercury))
-    r = a_mercury * (1 - e_mercury * np.cos(E))  
+    true_anomaly = 2 * np.arctan2(np.sqrt(1 + e) * np.tan(E / 2), np.sqrt(1 - e))
+    r = a * (1 - e * np.cos(E))  # Semi-major axis of the planet
 
     x = r * np.cos(true_anomaly)
     y = r * np.sin(true_anomaly)
-    z = 0  # Mercury's orbit is roughly in the x-y plane
+    z = 0  
 
     return x, y, z
 
@@ -65,61 +65,88 @@ ax.set_facecolor('black')
 
 # Lines to represent the orbits (initialize with empty data)
 sun_path, = ax.plot([], [], [], color="orange", label="Sun")
-mercury_path, = ax.plot([], [], [], color="brown", label="Mercury")
+mercury_path, = ax.plot([], [], [], color="black", label="Mercury", linewidth=2, linestyle='-') 
+venus_path, = ax.plot([], [], [], color="brown", label="Venus", linewidth=2, linestyle='-') 
 
 # Create representations of the Sun and Mercury 
 sun, = ax.plot([], [], [], 'o', color='orange')
-mercury, = ax.plot([], [], [], 'o', color='brown', markersize=4)
+mercury, = ax.plot([], [], [], 'o', color='black', markersize=4)
+venus, = ax.plot([], [], [], 'o', color='brown', markersize=4)
 
 # Lists to store orbit history
 mercury_x = []
 mercury_y = []
 mercury_z = []
+venus_x = []
+venus_y = []
+venus_z = []
 
 def init():
-    # Initialize lines with empty data
+    # Initialize lines with empty data (all planets)
     sun_path.set_data([], []) 
     sun_path.set_3d_properties([])
     mercury_path.set_data([], []) 
     mercury_path.set_3d_properties([])
+    venus_path.set_data([], []) 
+    venus_path.set_3d_properties([])
+
+    # Initialize representations of the planets
     sun.set_data([], [])
     sun.set_3d_properties([])
     mercury.set_data([], [])
     mercury.set_3d_properties([])
+    venus.set_data([], [])
+    venus.set_3d_properties([])
 
-    return sun_path, mercury_path, sun, mercury
+    # Return all elements
+    return sun_path, mercury_path, venus_path, sun, mercury, venus 
 
 # Animation function (called repeatedly)
 def animate(i):
-    x, y, z = calculate_position(i * T_mercury / 50)  # Update positions
+    # Mercury calculations 
+    x_mercury, y_mercury, z_mercury = calculate_position(i * T_mercury / 50, a_mercury, e_mercury, T_mercury) 
 
-    sun.set_data(0, 0)  
-    sun.set_3d_properties(0) 
+    # Venus calculations 
+    x_venus, y_venus, z_venus = calculate_position(i * T_venus / 50, a_venus, e_venus, T_venus)
+    
+    sun.set_data(0, 0)
+    sun.set_3d_properties(0)  # Set 3D position
 
-    mercury.set_data(x, y)
-    mercury.set_3d_properties(z)
+    mercury.set_data(x_mercury, y_mercury)
+    mercury.set_3d_properties(z_mercury)
 
-    # Store positions for the orbit path
-    mercury_x.append(x)
-    mercury_y.append(y)
-    mercury_z.append(z)
+    # Store Mercury positions for the orbit path
+    mercury_x.append(x_mercury)
+    mercury_y.append(y_mercury)
+    mercury_z.append(z_mercury)
 
-    # Plot the orbit history 
+    # Plot Mercury orbit history 
     mercury_path.set_data(mercury_x, mercury_y)
     mercury_path.set_3d_properties(mercury_z)
 
-    
-    ax.set_xlim(-1.5 * a_mercury, 1.5 * a_mercury) 
-    ax.set_ylim(-1.5 * a_mercury, 1.5 * a_mercury)
-    ax.set_zlim(-1.5 * a_mercury, 1.5 * a_mercury)
+    venus.set_data(x_venus, y_venus)
+    venus.set_3d_properties(z_venus)
 
-    return sun, mercury
+    # Store Venus positions for the orbit path
+    venus_x.append(x_venus)
+    venus_y.append(y_venus)
+    venus_z.append(z_venus)
+
+    # Plot Venus orbit history 
+    venus_path.set_data(venus_x, venus_y)
+    venus_path.set_3d_properties(venus_z)
+
+    ax.set_xlim(-1.5 * a_venus, 1.5 * a_venus) 
+    ax.set_ylim(-1.5 * a_venus, 1.5 * a_venus)
+    ax.set_zlim(-1.5 * a_venus, 1.5 * a_venus)
+
+    return sun, mercury, venus
 
 # Add the legend
 ax.legend()
 
 # Create and run the animation
-animation = animation.FuncAnimation(fig, animate, frames=50, interval=30, blit=True)
+animation = animation.FuncAnimation(fig, animate, frames=100, interval=30, blit=True)
 plt.show()
 
 # Save the animation

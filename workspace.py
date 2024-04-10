@@ -65,8 +65,8 @@ ax.set_facecolor('black')
 
 # Lines to represent the orbits (initialize with empty data)
 sun_path, = ax.plot([], [], [], color="orange", label="Sun")
-mercury_path, = ax.plot([], [], [], color="black", label="Mercury")
-venus_path, = ax.plot([], [], [], color="brown", label="Venus")
+mercury_path, = ax.plot([], [], [], color="black", label="Mercury", linewidth=2, linestyle='-') 
+venus_path, = ax.plot([], [], [], color="brown", label="Venus", linewidth=2, linestyle='-') 
 
 # Create representations of the Sun and Mercury 
 sun, = ax.plot([], [], [], 'o', color='orange')
@@ -146,7 +146,7 @@ def animate(i):
 ax.legend()
 
 # Create and run the animation
-animation = animation.FuncAnimation(fig, animate, frames=50, interval=30, blit=True)
+animation = animation.FuncAnimation(fig, animate, frames=100, interval=30, blit=True)
 plt.show()
 
 # Save the animation
