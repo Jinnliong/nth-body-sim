@@ -1,9 +1,11 @@
-import scipy.integrate # Library for numerical integration (ODE Solvers)
+# Let's enhance our cosmic journey to include 3D motion for the Sun, Mercury, and Venus!
+
+import scipy.integrate  # Library for numerical integration (ODE Solvers)
 import numpy as np  # Library for numerical calculations
 import matplotlib.pyplot as plt  # Library for plotting
 from mpl_toolkits.mplot3d import Axes3D  # For 3D plots
 from matplotlib import animation  # For creating animations
-from matplotlib.animation import PillowWriter
+from matplotlib.animation import PillowWriter  # For saving GIFs
 
 # Constants 
 G = 6.674e-11  # Gravitational constant
@@ -58,7 +60,7 @@ fig.patch.set_facecolor('black')
 ax.set_xlabel("x-coordinate", fontsize=14)
 ax.set_ylabel("y-coordinate", fontsize=14)
 ax.set_zlabel("z-coordinate", fontsize=14)
-ax.set_title("Visualization of orbits of stars in our Solar System\n", fontsize=14)
+ax.set_title("A Cosmic Waltz: Mercury and Venus in the Solar System\n", fontsize=14)
 ax.title.set_color('white')
 ax.xaxis.label.set_color('white')
 ax.yaxis.label.set_color('white')
@@ -74,8 +76,8 @@ sun_path, = ax.plot([], [], [], color="orange", label="Sun")
 mercury_path, = ax.plot([], [], [], color="black", label="Mercury", linewidth=2, linestyle='-') 
 venus_path, = ax.plot([], [], [], color="brown", label="Venus", linewidth=2, linestyle='-') 
 
-# Create representations of the Sun and Mercury 
-sun, = ax.plot([], [], [], 'o', color='orange')
+# Create representations of the Sun and planets 
+sun, = ax.plot([], [], [], 'o', color='orange', markersize=10)
 mercury, = ax.plot([], [], [], 'o', color='black', markersize=4)
 venus, = ax.plot([], [], [], 'o', color='brown', markersize=4)
 
@@ -109,14 +111,25 @@ def init():
 
 # Animation function (called repeatedly)
 def animate(i):
+    # Sun's motion (straight line in 3D)
+    x_sun = i * 1e9  # Sun moves along the X-axis
+    y_sun = 0  # Sun remains fixed at y = 0
+    z_sun = 0  # Sun remains fixed at z = 0
+
     # Mercury calculations
     x_mercury, y_mercury, z_mercury = calculate_position(i * T_mercury / mercury_frames, a_mercury, e_mercury, T_mercury)
+    x_mercury += x_sun  # Mercury moves along with the Sun
+    y_mercury += y_sun  # Mercury moves along with the Sun
+    z_mercury += z_sun  # Mercury moves along with the Sun
 
     # Venus calculations
     x_venus, y_venus, z_venus = calculate_position(i * T_venus / venus_frames, a_venus, e_venus, T_venus)
+    x_venus += x_sun  # Venus moves along with the Sun
+    y_venus += y_sun  # Venus moves along with the Sun
+    z_venus += z_sun  # Venus moves along with the Sun
 
-    sun.set_data(0, 0)
-    sun.set_3d_properties(0)  # Set 3D position
+    sun.set_data(x_sun, y_sun)
+    sun.set_3d_properties(z_sun)  # Set 3D position
 
     mercury.set_data(x_mercury, y_mercury)
     mercury.set_3d_properties(z_mercury)
@@ -142,9 +155,10 @@ def animate(i):
     venus_path.set_data(venus_x, venus_y)
     venus_path.set_3d_properties(venus_z)
 
-    ax.set_xlim(-1.5 * a_venus, 1.5 * a_venus)
-    ax.set_ylim(-1.5 * a_venus, 1.5 * a_venus)
-    ax.set_zlim(-1.5 * a_venus, 1.5 * a_venus)
+    # Set the viewing limits
+    ax.set_xlim(-2.5 * a_venus + x_sun, 2.5 * a_venus + x_sun)
+    ax.set_ylim(-2.5 * a_venus, 2.5 * a_venus)
+    ax.set_zlim(-2.5 * a_venus, 2.5 * a_venus)
 
     return sun, mercury, venus
 
@@ -154,8 +168,8 @@ ax.legend()
 # Create and run the animation
 animation = animation.FuncAnimation(fig, animate, frames=max(mercury_frames, venus_frames), interval=30, blit=True)
 
-plt.show()
-
 # Save the animation
-animation.save("C:/Users/aloha/OneDrive/Data/nth-body-sim/solar_sys_simulation.gif", writer=PillowWriter(fps=24))
-print("GIF Save Attempted")
+animation.save("solar_sys_simulation.gif", writer=PillowWriter(fps=24))
+print("GIF Saved Successfully!")
+
+plt.show()

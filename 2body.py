@@ -176,11 +176,11 @@ def animate(i):
 
     return line1, mercury, star1, star2
 
-# Create animation
-ani = animation.FuncAnimation(fig, animate, frames=len(time_span), interval=20, blit=True, init_func=init)
-
 # Add the legend
 ax.legend()
+
+# Create animation
+ani = animation.FuncAnimation(fig, animate, frames=len(time_span), interval=20, blit=True, init_func=init)
 
 # Save the animation
 ani.save("two_body_simulation.gif", writer=PillowWriter(fps=24))

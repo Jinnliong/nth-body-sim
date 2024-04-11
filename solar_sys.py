@@ -1,9 +1,11 @@
-import scipy.integrate # Library for numerical integration (ODE Solvers)
+# Let's embark on a journey through our cosmic neighborhood with Python!
+
+import scipy.integrate  # Library for numerical integration (ODE Solvers)
 import numpy as np  # Library for numerical calculations
 import matplotlib.pyplot as plt  # Library for plotting
 from mpl_toolkits.mplot3d import Axes3D  # For 3D plots
 from matplotlib import animation  # For creating animations
-from matplotlib.animation import PillowWriter
+from matplotlib.animation import PillowWriter  # For saving GIFs
 
 # Constants 
 G = 6.674e-11  # Gravitational constant
@@ -58,7 +60,7 @@ fig.patch.set_facecolor('black')
 ax.set_xlabel("x-coordinate", fontsize=14)
 ax.set_ylabel("y-coordinate", fontsize=14)
 ax.set_zlabel("z-coordinate", fontsize=14)
-ax.set_title("Visualization of orbits of stars in our Solar System\n", fontsize=14)
+ax.set_title("A Cosmic Waltz: Mercury and Venus in the Solar System\n", fontsize=14)
 ax.title.set_color('white')
 ax.xaxis.label.set_color('white')
 ax.yaxis.label.set_color('white')
@@ -74,7 +76,7 @@ sun_path, = ax.plot([], [], [], color="orange", label="Sun")
 mercury_path, = ax.plot([], [], [], color="black", label="Mercury", linewidth=2, linestyle='-') 
 venus_path, = ax.plot([], [], [], color="brown", label="Venus", linewidth=2, linestyle='-') 
 
-# Create representations of the Sun and Mercury 
+# Create representations of the Sun and planets 
 sun, = ax.plot([], [], [], 'o', color='orange')
 mercury, = ax.plot([], [], [], 'o', color='black', markersize=4)
 venus, = ax.plot([], [], [], 'o', color='brown', markersize=4)
@@ -157,5 +159,5 @@ animation = animation.FuncAnimation(fig, animate, frames=max(mercury_frames, ven
 plt.show()
 
 # Save the animation
-animation.save("C:/Users/aloha/OneDrive/Data/nth-body-sim/solar_sys_simulation.gif", writer=PillowWriter(fps=24))
-print("GIF Save Attempted")
+animation.save("solar_sys_simulation.gif", writer=PillowWriter(fps=24))
+print("GIF Saved Successfully!")
