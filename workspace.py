@@ -1,11 +1,9 @@
-# Let's enhance our cosmic journey to include 3D motion for the Sun, Mercury, Venus, Earth, Mars, and Jupiter!
-
-import scipy.integrate  # Library for numerical integration (ODE Solvers)
-import numpy as np  # Library for numerical calculations
-import matplotlib.pyplot as plt  # Library for plotting
-from mpl_toolkits.mplot3d import Axes3D  # For 3D plots
-from matplotlib import animation  # For creating animations
-from matplotlib.animation import PillowWriter  # For saving GIFs
+import scipy.integrate
+import numpy as np
+import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
+from matplotlib import animation
+from matplotlib.animation import PillowWriter
 
 # Constants 
 G = 6.674e-11  # Gravitational constant
@@ -16,40 +14,32 @@ a_mercury = 57.91e9  # Semi-major axis (meters)
 e_mercury = 0.2056  # Eccentricity
 T_mercury = 88 * 24 * 3600  # Orbital period (seconds)
 
-# Number of frames for Mercury's orbit (proportional to its orbital period)
-mercury_frames = int(T_mercury / (24 * 3600))  # Convert orbital period to days and then frames
-
 # Venus Orbital Parameters
 a_venus = 108.2e9  # Semi-major axis (meters)
 e_venus = 0.0067  # Eccentricity
 T_venus = 225 * 24 * 3600  # Orbital period (seconds)
-
-# Number of frames for Venus's orbit (proportional to its orbital period)
-venus_frames = int(T_venus / (24 * 3600))  # Convert orbital period to days and then frames
 
 # Earth Orbital Parameters
 a_earth = 149.6e9  # Semi-major axis (meters)
 e_earth = 0.0167  # Eccentricity
 T_earth = 365.25 * 24 * 3600  # Orbital period (seconds)
 
-# Number of frames for Earth's orbit (proportional to its orbital period)
-earth_frames = int(T_earth / (24 * 3600))  # Convert orbital period to days and then frames
-
 # Mars Orbital Parameters
 a_mars = 227.9e9  # Semi-major axis (meters)
 e_mars = 0.0934  # Eccentricity
 T_mars = 1.88 * 365.25 * 24 * 3600  # Orbital period (seconds)
-
-# Number of frames for Mars's orbit (proportional to its orbital period)
-mars_frames = int(T_mars / (24 * 3600))  # Convert orbital period to days and then frames
 
 # Jupiter Orbital Parameters
 a_jupiter = 778.5e9  # Semi-major axis (meters)
 e_jupiter = 0.0489  # Eccentricity
 T_jupiter = 11.86 * 365.25 * 24 * 3600  # Orbital period (seconds)
 
-# Number of frames for Jupiter's orbit (proportional to its orbital period)
-jupiter_frames = int(T_jupiter / (24 * 3600))  # Convert orbital period to days and then frames
+# Number of frames for each planet's orbit
+mercury_frames = int(T_mercury / (24 * 3600))
+venus_frames = int(T_venus / (24 * 3600))
+earth_frames = int(T_earth / (24 * 3600))
+mars_frames = int(T_mars / (24 * 3600))
+jupiter_frames = int(T_jupiter / (24 * 3600))
 
 # Function to calculate Solar system stars' position at a given time
 def calculate_position(t, a, e, T): 
@@ -72,7 +62,7 @@ def calculate_position(t, a, e, T):
 
     return x, y, z
 
-print("Calculated Positions Successfully!")
+print("Position Calculated Successfully!")
 
 # Set up the plot
 fig = plt.figure()
@@ -86,7 +76,7 @@ fig.patch.set_facecolor('black')
 ax.set_xlabel("x-coordinate", fontsize=14)
 ax.set_ylabel("y-coordinate", fontsize=14)
 ax.set_zlabel("z-coordinate", fontsize=14)
-ax.set_title("A Cosmic Waltz: Mercury, Venus, Earth, Mars, Jupiter, and the Sun in the Solar System\n", fontsize=14)
+ax.set_title("A Cosmic Waltz: Planets in the Solar System\n", fontsize=14)
 ax.title.set_color('white')
 ax.xaxis.label.set_color('white')
 ax.yaxis.label.set_color('white')
@@ -111,27 +101,15 @@ mercury, = ax.plot([], [], [], 'o', color='black', markersize=4)
 venus, = ax.plot([], [], [], 'o', color='brown', markersize=4)
 earth, = ax.plot([], [], [], 'o', color='green', markersize=4)
 mars, = ax.plot([], [], [], 'o', color='red', markersize=4)
-jupiter, = ax.plot([], [], [], 'o', color='cyan', markersize=8)
+jupiter, = ax.plot([], [], [], 'o', color='cyan', markersize=6)
 
 # Lists to store orbit history
-sun_x = []
-sun_y = []
-sun_z = []
-mercury_x = []
-mercury_y = []
-mercury_z = []
-venus_x = []
-venus_y = []
-venus_z = []
-earth_x = []
-earth_y = []
-earth_z = []
-mars_x = []
-mars_y = []
-mars_z = []
-jupiter_x = []
-jupiter_y = []
-jupiter_z = []
+sun_x, sun_y, sun_z = [], [], []
+mercury_x, mercury_y, mercury_z = [], [], []
+venus_x, venus_y, venus_z = [], [], []
+earth_x, earth_y, earth_z = [], [], []
+mars_x, mars_y, mars_z = [], [], []
+jupiter_x, jupiter_y, jupiter_z = [], [], []
 
 def init():
     # Initialize lines with empty data (all planets)
@@ -165,7 +143,7 @@ def init():
     # Return all elements
     return sun_path, mercury_path, venus_path, earth_path, mars_path, jupiter_path, sun, mercury, venus, earth, mars, jupiter
 
-print("Initiallization Successfully!")
+print("Initialization Executed Successfully!")
 
 # Animation function (called repeatedly)
 def animate(i):
@@ -210,89 +188,80 @@ def animate(i):
     mercury.set_data(x_mercury, y_mercury)
     mercury.set_3d_properties(z_mercury)
 
-    # Store Mercury positions for the orbit path
-    mercury_x.append(x_mercury)
-    mercury_y.append(y_mercury)
-    mercury_z.append(z_mercury)
-
-    # Plot Mercury orbit history
-    mercury_path.set_data(mercury_x, mercury_y)
-    mercury_path.set_3d_properties(mercury_z)
-
     venus.set_data(x_venus, y_venus)
     venus.set_3d_properties(z_venus)
-
-    # Store Venus positions for the orbit path
-    venus_x.append(x_venus)
-    venus_y.append(y_venus)
-    venus_z.append(z_venus)
-
-    # Plot Venus orbit history
-    venus_path.set_data(venus_x, venus_y)
-    venus_path.set_3d_properties(venus_z)
 
     earth.set_data(x_earth, y_earth)
     earth.set_3d_properties(z_earth)
 
-    # Store Earth positions for the orbit path
-    earth_x.append(x_earth)
-    earth_y.append(y_earth)
-    earth_z.append(z_earth)
-
-    # Plot Earth orbit history
-    earth_path.set_data(earth_x, earth_y)
-    earth_path.set_3d_properties(earth_z)
-
     mars.set_data(x_mars, y_mars)
     mars.set_3d_properties(z_mars)
-
-    # Store Mars positions for the orbit path
-    mars_x.append(x_mars)
-    mars_y.append(y_mars)
-    mars_z.append(z_mars)
-
-    # Plot Mars orbit history
-    mars_path.set_data(mars_x, mars_y)
-    mars_path.set_3d_properties(mars_z)
 
     jupiter.set_data(x_jupiter, y_jupiter)
     jupiter.set_3d_properties(z_jupiter)
 
-    # Store Jupiter positions for the orbit path
-    jupiter_x.append(x_jupiter)
-    jupiter_y.append(y_jupiter)
-    jupiter_z.append(z_jupiter)
-
-    # Plot Jupiter orbit history
-    jupiter_path.set_data(jupiter_x, jupiter_y)
-    jupiter_path.set_3d_properties(jupiter_z)
-
-    # Store Sun positions for the orbit path
+    # Store positions for the orbit paths
     sun_x.append(x_sun)
     sun_y.append(y_sun)
     sun_z.append(z_sun)
 
-    # Plot Sun orbit history
+    mercury_x.append(x_mercury)
+    mercury_y.append(y_mercury)
+    mercury_z.append(z_mercury)
+
+    venus_x.append(x_venus)
+    venus_y.append(y_venus)
+    venus_z.append(z_venus)
+
+    earth_x.append(x_earth)
+    earth_y.append(y_earth)
+    earth_z.append(z_earth)
+
+    mars_x.append(x_mars)
+    mars_y.append(y_mars)
+    mars_z.append(z_mars)
+
+    jupiter_x.append(x_jupiter)
+    jupiter_y.append(y_jupiter)
+    jupiter_z.append(z_jupiter)
+
+    # Plot orbit history
     sun_path.set_data(sun_x, sun_y)
     sun_path.set_3d_properties(sun_z)
 
+    mercury_path.set_data(mercury_x, mercury_y)
+    mercury_path.set_3d_properties(mercury_z)
+
+    venus_path.set_data(venus_x, venus_y)
+    venus_path.set_3d_properties(venus_z)
+
+    earth_path.set_data(earth_x, earth_y)
+    earth_path.set_3d_properties(earth_z)
+
+    mars_path.set_data(mars_x, mars_y)
+    mars_path.set_3d_properties(mars_z)
+
+    jupiter_path.set_data(jupiter_x, jupiter_y)
+    jupiter_path.set_3d_properties(jupiter_z)
+
     # Set the viewing limits
-    ax.set_xlim(-2.5 * a_jupiter + x_sun, 2.5 * a_jupiter + x_sun)
-    ax.set_ylim(-2.5 * a_jupiter, 2.5 * a_jupiter + y_sun)
-    ax.set_zlim(-2.5 * a_jupiter, 2.5 * a_jupiter + z_sun)
+    ax.set_xlim(-2.5 * a_earth + x_sun, 2.5 * a_earth + x_sun)
+    ax.set_ylim(-2.5 * a_earth, 2.5 * a_earth + y_sun)
+    ax.set_zlim(-2.5 * a_earth, 2.5 * a_earth + z_sun)
 
     return sun, mercury, venus, earth, mars, jupiter
 
-print("Animation Generated Successfully!")
+print("Animation Set Successfully!")
 
 # Add the legend
 ax.legend()
 
 # Create and run the animation with increased frames
 animation = animation.FuncAnimation(fig, animate, frames=3 * max(mercury_frames, venus_frames, earth_frames, mars_frames, jupiter_frames), interval=30, blit=True)
+print("Animation Create & Run Successfully!")
 
 # Save the animation
-animation.save("solar_sys_simulation_with_earth_mars_jupiter.gif", writer=PillowWriter(fps=24))
+animation.save("solar_sys_simulation_with_all_planets.gif", writer=PillowWriter(fps=24))
 print("GIF Saved Successfully!")
 
 plt.show()
