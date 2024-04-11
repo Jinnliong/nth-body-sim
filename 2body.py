@@ -183,7 +183,7 @@ ax.legend()
 ani = animation.FuncAnimation(fig, animate, frames=len(time_span), interval=20, blit=True, init_func=init)
 
 # Save the animation
-ani.save("two_body_simulation.gif", writer=PillowWriter(fps=24))
+ani.save("2body.gif", writer=PillowWriter(fps=24))
 print("GIF Save Attempted")
 
 # Display the animation

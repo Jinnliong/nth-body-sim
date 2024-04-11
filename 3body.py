@@ -199,7 +199,7 @@ ani = animation.FuncAnimation(fig, animate, frames=len(time_span), interval=20, 
 ax.legend()
 
 # Save the animation
-ani.save("three_body_simulation.gif", writer=PillowWriter(fps=24))
+ani.save("3body.gif", writer=PillowWriter(fps=24))
 print("GIF Saved Successfully!")
 
 # Display the animation

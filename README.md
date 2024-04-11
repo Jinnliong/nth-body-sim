@@ -3,9 +3,9 @@ Title: The Cosmic Ballet: Simulating the Three-Body Problem
 # Introduction
 Get ready to explore the wonders of the cosmos!  From the predictable dance of planets around a star to the intricate interactions of multiple stars,  celestial motion has captivated us for centuries. In this project, we'll use Python to simulate these beautiful orbits, learning about the physics behind them and the joy of coding along the way.
 
-![Stable Two Body](./2bodysim.png)
+![Stable Two Body](./2body.png)
 
-![Three Body Problem](./3bodysim.png)
+![Three Body Problem](./3body.png)
 
 # My Motivation
 - The Universe is Awesome: I want to understand the forces that shape the motion of stars and planets. It's incredible!
@@ -44,10 +44,10 @@ The Equations of Motion
 
 ## Running the Simulation
 Two-Body System (Alpha Centauri A and Alpha Centauri B):Let's start simple! We'll simulate the familiar Earth-Sun orbit.
-![Two Body Simulation](./two_body_simulation.gif)
+![Two Body Simulation](./2body.gif)
 
 Three-Body System (Stars Dancing): Now, the intrigue! Watch as three stars interact in surprising ways.
-![Three Body Simulation](./three_body_simulation.gif)
+![Three Body Simulation](./3body.gif)
 
 ## The Challenge and the Beauty
 Even simple systems can create unexpected patterns!  Small changes to the starting setup can drastically alter the long-term behavior of the orbits.  That's part of the magic of the universe

@@ -1,0 +1,20 @@
+name: Debugging Workflow
+
+on: [push]  # Trigger the workflow on code pushes
+
+jobs:
+  debug:
+    runs-on: ubuntu-latest  # Specify the environment
+
+    steps:
+      - uses: actions/checkout@v3  # Check out your code
+      - name: Set up Python 
+        uses: actions/setup-python@v4 
+        with:
+          python-version: '3.11'  # Specify the Python version you use
+      - name: Install dependencies
+        run: pip install -r requirements.txt 
+      - name: Run your code and collect debugging information
+        run: | 
+          python workspace.py  # Replace with your actual script
+          # Add commands to collect logs, screenshots, etc.
