@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 from matplotlib import animation
 from matplotlib.animation import PillowWriter
+from tqdm import tqdm
 
 # Constants 
 G = 6.674e-11  # Gravitational constant
@@ -256,12 +257,26 @@ print("Animation Set Successfully!")
 # Add the legend
 ax.legend()
 
-# Create and run the animation with increased frames
-animation = animation.FuncAnimation(fig, animate, frames=3 * max(mercury_frames, venus_frames, earth_frames, mars_frames, jupiter_frames), interval=30, blit=True)
-print("Animation Create & Run Successfully!")
+# Calculate the total number of frames
+total_frames = 3 * max(mercury_frames, venus_frames, earth_frames, mars_frames, jupiter_frames)
 
-# Save the animation
-animation.save("solar_sys_simulation_with_all_planets.gif", writer=PillowWriter(fps=24))
-print("GIF Saved Successfully!")
+# Create a progress bar
+with tqdm(total=total_frames) as pbar:
+    # Animation function (called repeatedly)
+    def animate(i):
+        # Your animation code here
+
+        # Update the progress bar
+        pbar.update(1)
+
+    # Create and run the animation with increased frames
+    animation = animation.FuncAnimation(fig, animate, frames=total_frames, interval=30, blit=True)
+
+    # Save the animation
+    animation.save("solar_sys_simulation_with_all_planets.gif", writer=PillowWriter(fps=24))
+
+# Finish the progress bar
+pbar.close()
+
 
 plt.show()
