@@ -14,10 +14,16 @@ a_mercury = 57.91e9  # Semi-major axis (meters)
 e_mercury = 0.2056  # Eccentricity
 T_mercury = 88 * 24 * 3600  # Orbital period (seconds)
 
+# Number of frames for Mercury's orbit (proportional to its orbital period)
+mercury_frames = int(T_mercury / (24 * 3600))  # Convert orbital period to days and then frames
+
 # Venus Orbital Parameters
 a_venus = 108.2e9  # Semi-major axis (meters)
 e_venus = 0.0067  # Eccentricity
 T_venus = 225 * 24 * 3600  # Orbital period (seconds)
+
+# Number of frames for Venus's orbit (proportional to its orbital period)
+venus_frames = int(T_venus / (24 * 3600))  # Convert orbital period to days and then frames
 
 # Function to calculate Solar system stars' position at a given time
 def calculate_position(t, a, e, T): 
@@ -103,12 +109,12 @@ def init():
 
 # Animation function (called repeatedly)
 def animate(i):
-    # Mercury calculations 
-    x_mercury, y_mercury, z_mercury = calculate_position(i * T_mercury / 50, a_mercury, e_mercury, T_mercury) 
+    # Mercury calculations
+    x_mercury, y_mercury, z_mercury = calculate_position(i * T_mercury / mercury_frames, a_mercury, e_mercury, T_mercury)
 
-    # Venus calculations 
-    x_venus, y_venus, z_venus = calculate_position(i * T_venus / 50, a_venus, e_venus, T_venus)
-    
+    # Venus calculations
+    x_venus, y_venus, z_venus = calculate_position(i * T_venus / venus_frames, a_venus, e_venus, T_venus)
+
     sun.set_data(0, 0)
     sun.set_3d_properties(0)  # Set 3D position
 
@@ -120,7 +126,7 @@ def animate(i):
     mercury_y.append(y_mercury)
     mercury_z.append(z_mercury)
 
-    # Plot Mercury orbit history 
+    # Plot Mercury orbit history
     mercury_path.set_data(mercury_x, mercury_y)
     mercury_path.set_3d_properties(mercury_z)
 
@@ -132,11 +138,11 @@ def animate(i):
     venus_y.append(y_venus)
     venus_z.append(z_venus)
 
-    # Plot Venus orbit history 
+    # Plot Venus orbit history
     venus_path.set_data(venus_x, venus_y)
     venus_path.set_3d_properties(venus_z)
 
-    ax.set_xlim(-1.5 * a_venus, 1.5 * a_venus) 
+    ax.set_xlim(-1.5 * a_venus, 1.5 * a_venus)
     ax.set_ylim(-1.5 * a_venus, 1.5 * a_venus)
     ax.set_zlim(-1.5 * a_venus, 1.5 * a_venus)
 
@@ -146,7 +152,8 @@ def animate(i):
 ax.legend()
 
 # Create and run the animation
-animation = animation.FuncAnimation(fig, animate, frames=100, interval=30, blit=True)
+animation = animation.FuncAnimation(fig, animate, frames=max(mercury_frames, venus_frames), interval=30, blit=True)
+
 plt.show()
 
 # Save the animation
