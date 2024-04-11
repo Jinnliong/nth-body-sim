@@ -1,0 +1,8 @@
+name: my_project_env  # Name of your environment
+channels:
+  - conda-forge     # Popular source for packages
+dependencies:
+  - python=3.10      # Specify your desired Python version
+  - numpy
+  - matplotlib
+  - scipy
