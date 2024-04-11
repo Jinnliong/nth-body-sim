@@ -6,6 +6,8 @@ import matplotlib.pyplot as plt  # Library for plotting
 from mpl_toolkits.mplot3d import Axes3D  # For 3D plots
 from matplotlib import animation  # For creating animations
 from matplotlib.animation import PillowWriter  # For saving GIFs
+import sys
+import time
 
 # Constants 
 G = 6.674e-11  # Gravitational constant
@@ -64,6 +66,8 @@ def calculate_position(t, a, e, T):
 
     return x, y, z
 
+print("Position calculated successfully!")
+
 # Set up the plot
 fig = plt.figure()
 ax = fig.add_subplot(111, projection='3d')
@@ -76,7 +80,7 @@ fig.patch.set_facecolor('black')
 ax.set_xlabel("x-coordinate", fontsize=14)
 ax.set_ylabel("y-coordinate", fontsize=14)
 ax.set_zlabel("z-coordinate", fontsize=14)
-ax.set_title("A Cosmic Waltz: Mercury, Venus, Earth, Mars, and the Sun in the Solar System\n", fontsize=14)
+ax.set_title("A Cosmic Waltz: Planets in the Solar System\n", fontsize=14)
 ax.title.set_color('white')
 ax.xaxis.label.set_color('white')
 ax.yaxis.label.set_color('white')
@@ -146,6 +150,8 @@ def init():
     # Return all elements
     return sun_path, mercury_path, venus_path, earth_path, mars_path, sun, mercury, venus, earth, mars
 
+print("Successfully Initialized!")
+
 # Animation function (called repeatedly)
 def animate(i):
     # Sun's motion (straight line in 3D)
@@ -177,10 +183,10 @@ def animate(i):
     y_mars += y_sun  # Mars moves along with the Sun
     z_mars += z_sun  # Mars moves along with the Sun
 
-    sun.set_data(x_sun, y_sun)
+    sun.set_data([x_sun], [y_sun])
     sun.set_3d_properties(z_sun)  # Set 3D position
 
-    mercury.set_data(x_mercury, y_mercury)
+    mercury.set_data([x_mercury], [y_mercury])
     mercury.set_3d_properties(z_mercury)
 
     # Store Mercury positions for the orbit path
@@ -192,7 +198,7 @@ def animate(i):
     mercury_path.set_data(mercury_x, mercury_y)
     mercury_path.set_3d_properties(mercury_z)
 
-    venus.set_data(x_venus, y_venus)
+    venus.set_data([x_venus], [y_venus])
     venus.set_3d_properties(z_venus)
 
     # Store Venus positions for the orbit path
@@ -204,7 +210,7 @@ def animate(i):
     venus_path.set_data(venus_x, venus_y)
     venus_path.set_3d_properties(venus_z)
 
-    earth.set_data(x_earth, y_earth)
+    earth.set_data([x_earth], [y_earth])
     earth.set_3d_properties(z_earth)
 
     # Store Earth positions for the orbit path
@@ -216,7 +222,7 @@ def animate(i):
     earth_path.set_data(earth_x, earth_y)
     earth_path.set_3d_properties(earth_z)
 
-    mars.set_data(x_mars, y_mars)
+    mars.set_data([x_mars], [y_mars])
     mars.set_3d_properties(z_mars)
 
     # Store Mars positions for the orbit path
@@ -244,14 +250,52 @@ def animate(i):
 
     return sun, mercury, venus, earth, mars
 
+print("Animation setup successfully!")
+
 # Add the legend
 ax.legend()
 
-# Create and run the animation with increased frames
-animation = animation.FuncAnimation(fig, animate, frames=3 * max(mercury_frames, venus_frames, earth_frames, mars_frames), interval=30, blit=True)
+def progress_bar(total):
+    bar_length = 50
+    for i in range(total + 1):
+        progress = i / total
+        num_blocks = int(progress * bar_length)
+        bar = "[" + "#" * num_blocks + " " * (bar_length - num_blocks) + "]"
+        sys.stdout.write("\r" + bar + " {:.2%}".format(progress))
+        sys.stdout.flush()
+        time.sleep(0.1)  # Simulate some work
+    print()  # Move to the next line after the progress bar is complete
+
+# progress_bar
+total_iterations = 100
+print("Generating Animation...")
+progress_bar(total_iterations)
+
+# Create and run the animation with an appropriate number of frames
+animation = animation.FuncAnimation(fig, animate, frames=max(mercury_frames, venus_frames, earth_frames, mars_frames), interval=30, blit=True)
+
+# Define a function to simulate the saving process
+def save_animation(frames_to_save):
+    print("Saving GIF...")
+    bar_length = 50
+    for i in range(frames_to_save):
+        # Simulate saving one frame (replace this with the actual saving process)
+        # Here, we just sleep for a short time to simulate the saving process
+        time.sleep(0.1)
+
+        # Calculate progress percentage
+        progress = (i + 1) / frames_to_save
+        num_blocks = int(progress * bar_length)
+        bar = "[" + "#" * num_blocks + " " * (bar_length - num_blocks) + "]"
+        sys.stdout.write("\r" + bar + " {:.2%}".format(progress))
+        sys.stdout.flush()
+
+    print("\nGIF Saved Successfully!")
+
+# Define the total number of frames
+total_frames = 3 * max(mercury_frames, venus_frames, earth_frames, mars_frames)
 
 # Save the animation
-animation.save("solar_sys_simulation_with_earth_and_mars.gif", writer=PillowWriter(fps=24))
-print("GIF Saved Successfully!")
+save_animation(total_frames)
 
 plt.show()

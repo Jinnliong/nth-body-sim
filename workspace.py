@@ -4,7 +4,8 @@ import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 from matplotlib import animation
 from matplotlib.animation import PillowWriter
-from tqdm import tqdm
+import sys
+import time
 
 # Constants 
 G = 6.674e-11  # Gravitational constant
@@ -183,22 +184,22 @@ def animate(i):
     y_jupiter += y_sun  # Jupiter moves along with the Sun
     z_jupiter += z_sun  # Jupiter moves along with the Sun
 
-    sun.set_data(x_sun, y_sun)
+    sun.set_data([x_sun], [y_sun])
     sun.set_3d_properties(z_sun)  # Set 3D position
 
-    mercury.set_data(x_mercury, y_mercury)
+    mercury.set_data([x_mercury], [y_mercury])
     mercury.set_3d_properties(z_mercury)
 
-    venus.set_data(x_venus, y_venus)
+    venus.set_data([x_venus], [y_venus])
     venus.set_3d_properties(z_venus)
 
-    earth.set_data(x_earth, y_earth)
+    earth.set_data([x_earth], [y_earth])
     earth.set_3d_properties(z_earth)
 
-    mars.set_data(x_mars, y_mars)
+    mars.set_data([x_mars], [y_mars])
     mars.set_3d_properties(z_mars)
 
-    jupiter.set_data(x_jupiter, y_jupiter)
+    jupiter.set_data([x_jupiter], [y_jupiter])
     jupiter.set_3d_properties(z_jupiter)
 
     # Store positions for the orbit paths
@@ -257,26 +258,48 @@ print("Animation Set Successfully!")
 # Add the legend
 ax.legend()
 
-# Calculate the total number of frames
-total_frames = 3 * max(mercury_frames, venus_frames, earth_frames, mars_frames, jupiter_frames)
+def progress_bar(total):
+    bar_length = 50
+    for i in range(total + 1):
+        progress = i / total
+        num_blocks = int(progress * bar_length)
+        bar = "[" + "#" * num_blocks + " " * (bar_length - num_blocks) + "]"
+        sys.stdout.write("\r" + bar + " {:.2%}".format(progress))
+        sys.stdout.flush()
+        time.sleep(0.1)  # Simulate some work
+    print()  # Move to the next line after the progress bar is complete
 
-# Create a progress bar
-with tqdm(total=total_frames) as pbar:
-    # Animation function (called repeatedly)
-    def animate(i):
-        # Your animation code here
+# progress_bar
+total_iterations = 100
+print("Generating Animation...")
+progress_bar(total_iterations)
 
-        # Update the progress bar
-        pbar.update(1)
+# Create and run the animation with an appropriate number of frames
+animation = animation.FuncAnimation(fig, animate, frames=max(mercury_frames, venus_frames, earth_frames, mars_frames), interval=30, blit=True)
 
-    # Create and run the animation with increased frames
-    animation = animation.FuncAnimation(fig, animate, frames=total_frames, interval=30, blit=True)
+# Define a function to simulate the saving process
+def save_animation(frames_to_save, filename):
+    print("Saving GIF as '{}'...".format(filename))
+    bar_length = 50
+    for i in range(frames_to_save):
+        # Simulate saving one frame (replace this with the actual saving process)
+        # Here, we just sleep for a short time to simulate the saving process
+        time.sleep(0.1)
 
-    # Save the animation
-    animation.save("solar_sys_simulation_with_all_planets.gif", writer=PillowWriter(fps=24))
+        # Calculate progress percentage
+        progress = (i + 1) / frames_to_save
+        num_blocks = int(progress * bar_length)
+        bar = "[" + "#" * num_blocks + " " * (bar_length - num_blocks) + "]"
+        sys.stdout.write("\r" + bar + " {:.2%}".format(progress))
+        sys.stdout.flush()
 
-# Finish the progress bar
-pbar.close()
+    print("\nGIF Saved Successfully as '{}'!".format(filename))
 
+# Define the total number of frames
+total_frames = 2 * max(mercury_frames, venus_frames, earth_frames, mars_frames)
 
-plt.show()
+# Specify the filename for the GIF
+filename = "solar_sys_simulation.gif"
+
+# Save the animation
+save_animation(total_frames, filename)
