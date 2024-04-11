@@ -1,20 +1,61 @@
-name: Debugging Workflow
+name: Python Package using Conda
 
-on: [push]  # Trigger the workflow on code pushes
+on: [push]
 
 jobs:
-  debug:
-    runs-on: ubuntu-latest  # Specify the environment
+  build-linux:
+    runs-on: ubuntu-latest
+    strategy:
+      max-parallel: 5
 
     steps:
-      - uses: actions/checkout@v3  # Check out your code
-      - name: Set up Python 
-        uses: actions/setup-python@v4 
+    - uses: actions/checkout@v3
+    - name: Set up Python 3.10
+      uses: actions/setup-python@v3
+      with:
+        python-version: '3.10'
+    - name: Add conda to system path
+      run: |
+        # $CONDA is an environment variable pointing to the root of the miniconda directory
+        echo $CONDA/bin >> $GITHUB_PATH
+    - name: Install dependencies
+      run: |
+        conda env update --file environment.yml --name base
+    - name: Lint with flake8
+      run: |
+        conda install flake8
+        # stop the build if there are Python syntax errors or undefined names
+        flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+        # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
+        flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+    - name: Test with pytest
+      run: |
+        conda install pytest
+        pytest
+
+  debug:  # New debugging job
+    runs-on: ubuntu-latest 
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python 3.10
+        uses: actions/setup-python@v3
         with:
-          python-version: '3.11'  # Specify the Python version you use
-      - name: Install dependencies
-        run: pip install -r requirements.txt 
-      - name: Run your code and collect debugging information
-        run: | 
-          python workspace.py  # Replace with your actual script
-          # Add commands to collect logs, screenshots, etc.
+          python-version: '3.10'
+      - name: Add conda to system path
+        run: |
+          echo $CONDA/bin >> $GITHUB_PATH
+      - name: Install dependencies (including debugging tools)
+        run: |
+          conda env update --file environment.yml --name base
+          conda install pdb  # Example: Install the pdb debugger
+
+      - name: Run your code in debug mode
+        run: |
+          python -m pdb workspace.py  # Replace with your actual script
+
+      - name: Collect debugging artifacts (optional)
+        if: ${{ always() }}  # Always collect artifacts even if debugging succeeds
+        uses: actions/upload-artifact@v3
+        with:
+          name: debugging-logs
+          path: debug_output.txt  # Example: Store logs in a file
