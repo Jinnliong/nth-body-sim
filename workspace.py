@@ -60,7 +60,7 @@ fig.patch.set_facecolor('black')
 ax.set_xlabel("x-coordinate", fontsize=14)
 ax.set_ylabel("y-coordinate", fontsize=14)
 ax.set_zlabel("z-coordinate", fontsize=14)
-ax.set_title("A Cosmic Waltz: Mercury and Venus in the Solar System\n", fontsize=14)
+ax.set_title("A Cosmic Waltz: Mercury, Venus, and the Sun in the Solar System\n", fontsize=14)
 ax.title.set_color('white')
 ax.xaxis.label.set_color('white')
 ax.yaxis.label.set_color('white')
@@ -82,6 +82,9 @@ mercury, = ax.plot([], [], [], 'o', color='black', markersize=4)
 venus, = ax.plot([], [], [], 'o', color='brown', markersize=4)
 
 # Lists to store orbit history
+sun_x = []
+sun_y = []
+sun_z = []
 mercury_x = []
 mercury_y = []
 mercury_z = []
@@ -155,18 +158,27 @@ def animate(i):
     venus_path.set_data(venus_x, venus_y)
     venus_path.set_3d_properties(venus_z)
 
+    # Store Sun positions for the orbit path
+    sun_x.append(x_sun)
+    sun_y.append(y_sun)
+    sun_z.append(z_sun)
+
+    # Plot Sun orbit history
+    sun_path.set_data(sun_x, sun_y)
+    sun_path.set_3d_properties(sun_z)
+
     # Set the viewing limits
     ax.set_xlim(-2.5 * a_venus + x_sun, 2.5 * a_venus + x_sun)
-    ax.set_ylim(-2.5 * a_venus, 2.5 * a_venus)
-    ax.set_zlim(-2.5 * a_venus, 2.5 * a_venus)
+    ax.set_ylim(-2.5 * a_venus, 2.5 * a_venus + y_sun)
+    ax.set_zlim(-2.5 * a_venus, 2.5 * a_venus + z_sun)
 
     return sun, mercury, venus
 
 # Add the legend
 ax.legend()
 
-# Create and run the animation
-animation = animation.FuncAnimation(fig, animate, frames=max(mercury_frames, venus_frames), interval=30, blit=True)
+# Create and run the animation with increased frames
+animation = animation.FuncAnimation(fig, animate, frames=3 * max(mercury_frames, venus_frames), interval=30, blit=True)
 
 # Save the animation
 animation.save("solar_sys_simulation.gif", writer=PillowWriter(fps=24))
