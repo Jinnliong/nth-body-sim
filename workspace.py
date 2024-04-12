@@ -142,7 +142,7 @@ ax.legend(loc="upper left", fontsize=14)
 ani = animation.FuncAnimation(fig, animate, frames=max(planet_frames.values()), interval=30, blit=True)
 
 # Define the total number of frames
-total_frames = 3 * max(planet_frames.values())
+total_frames = 2 * max(planet_frames.values())
 
 # Save the animation
 ani.save("solar_sys.gif", writer=PillowWriter(fps=24))

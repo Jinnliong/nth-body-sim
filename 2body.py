@@ -143,7 +143,7 @@ def init():
     star2.set_data([], [])
     star2.set_3d_properties([])
 
-    buffer = 0.5  # Adjust this value as needed
+    buffer = 0.1  # Adjust this value as needed
     max_range = np.array([r1_sol.max(), r2_sol.max()]).max() + buffer
     min_range = np.array([r1_sol.min(), r2_sol.min()]).min() - buffer
     ax.set_xlim(min_range, max_range)

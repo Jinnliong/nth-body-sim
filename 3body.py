@@ -133,7 +133,7 @@ ax.set_facecolor('black')
 
 # Lines to represent the orbits (initialize with empty data)
 line1, = ax.plot([], [], [], color="darkblue", label="Alpha Centauri A")
-mercury, = ax.plot([], [], [], color="tab:red", label="Alpha Centauri B")
+line2, = ax.plot([], [], [], color="tab:red", label="Alpha Centauri B")
 line3, = ax.plot([], [], [], color="tab:green", label="Third Celestial Body")
 
 # Scatter objects to represent stars
@@ -146,8 +146,8 @@ def init():
     # Initialize lines with empty data
     line1.set_data([], [])
     line1.set_3d_properties([])
-    mercury.set_data([], [])
-    mercury.set_3d_properties([])
+    line2.set_data([], [])
+    line2.set_3d_properties([])
     line3.set_data([], [])
     line3.set_3d_properties([])
     star1.set_data([], [])
@@ -157,14 +157,14 @@ def init():
     star3.set_data([], [])
     star3.set_3d_properties([])
 
-    buffer = 0.5  # Adjust this value as needed
+    buffer = 0.1  # Adjust this value as needed
     max_range = np.array([r1_sol.max(), r2_sol.max(), r3_sol.max()]).max() + buffer
     min_range = np.array([r1_sol.min(), r2_sol.min(), r3_sol.min()]).min() - buffer
     ax.set_xlim(min_range, max_range)
     ax.set_ylim(min_range, max_range)
     ax.set_zlim(min_range, max_range)
 
-    return line1, mercury, line3, star1, star2, star3
+    return line1, line2, line3, star1, star2, star3
 
 
 def animate(i):
@@ -176,8 +176,8 @@ def animate(i):
     if x1.size > 0 and y1.size > 0 and z1.size > 0:  # Check if arrays have data
         line1.set_data(x1, y1)
         line1.set_3d_properties(z1)
-        mercury.set_data(x2, y2)
-        mercury.set_3d_properties(z2)
+        line2.set_data(x2, y2)
+        line2.set_3d_properties(z2)
         line3.set_data(x3, y3)
         line3.set_3d_properties(z3)
 
@@ -189,7 +189,7 @@ def animate(i):
         star3.set_data(x3[-1], y3[-1])
         star3.set_3d_properties(z3[-1])
 
-    return line1, mercury, line3, star1, star2, star3
+    return line1, line2, line3, star1, star2, star3
 
 
 # Create animation
