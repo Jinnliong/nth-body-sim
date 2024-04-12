@@ -255,47 +255,12 @@ print("Animation setup successfully!")
 # Add the legend
 ax.legend()
 
-def progress_bar(total):
-    bar_length = 50
-    for i in range(total + 1):
-        progress = i / total
-        num_blocks = int(progress * bar_length)
-        bar = "[" + "#" * num_blocks + " " * (bar_length - num_blocks) + "]"
-        sys.stdout.write("\r" + bar + " {:.2%}".format(progress))
-        sys.stdout.flush()
-        time.sleep(0.1)  # Simulate some work
-    print()  # Move to the next line after the progress bar is complete
-
-# progress_bar
-total_iterations = 100
-print("Generating Animation...")
-progress_bar(total_iterations)
-
-# Create and run the animation with an appropriate number of frames
-animation = animation.FuncAnimation(fig, animate, frames=max(mercury_frames, venus_frames, earth_frames, mars_frames), interval=30, blit=True)
-
-# Define a function to simulate the saving process
-def save_animation(frames_to_save):
-    print("Saving GIF...")
-    bar_length = 50
-    for i in range(frames_to_save):
-        # Simulate saving one frame (replace this with the actual saving process)
-        # Here, we just sleep for a short time to simulate the saving process
-        time.sleep(0.1)
-
-        # Calculate progress percentage
-        progress = (i + 1) / frames_to_save
-        num_blocks = int(progress * bar_length)
-        bar = "[" + "#" * num_blocks + " " * (bar_length - num_blocks) + "]"
-        sys.stdout.write("\r" + bar + " {:.2%}".format(progress))
-        sys.stdout.flush()
-
-    print("\nGIF Saved Successfully!")
-
-# Define the total number of frames
-total_frames = 3 * max(mercury_frames, venus_frames, earth_frames, mars_frames)
+# Create animation
+ani = animation.FuncAnimation(fig, animate, frames=max(mercury_frames, venus_frames, earth_frames, mars_frames), interval=20, blit=True, init_func=init)
 
 # Save the animation
-save_animation(total_frames)
+ani.save("solar_sys.gif", writer=PillowWriter(fps=24))
+print("GIF Save Attempted")
 
+# Display the animation
 plt.show()
