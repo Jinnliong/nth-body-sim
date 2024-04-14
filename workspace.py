@@ -141,16 +141,19 @@ print("Animation Set Successfully!")
 # Display the legend
 ax.legend(loc="upper left", fontsize=14)
 
-# Create and run the animation with an appropriate number of frames
-ani = animation.FuncAnimation(fig, animate, frames=max(planet_frames.values()), interval=100, blit=True) # internal = 30ms is default speed, 15ms to double the playback.
-
 # Define the total number of frames
 total_frames = 1 * max(planet_frames.values()) # To adjust total number of frame
 
+# Adjust the interval parameter to reduce the frame rate
+ani = animation.FuncAnimation(fig, animate, frames=max(planet_frames.values()), interval=200, blit=True)  # Increase interval to reduce frame rate
+
 # Save the animation with progress indicator
-writer = PillowWriter(fps=24, metadata=dict(artist='Me'), bitrate=1800)
+writer = PillowWriter(fps=10, metadata=dict(artist='Me'), bitrate=1800)
 with writer.saving(fig, "solar_sys.gif", dpi=50):  # Adjust dpi as needed
-    for i in range(total_frames):
+    # Adjust the step size to skip frames
+    step_size = 5  # Skip every 5 frames
+    for i in range(0, total_frames, step_size):
+        
         # Update the progress indicator
         print(f"Saving frame {i+1}/{total_frames} - {((i+1)/total_frames)*100:.2f}% complete", end="\r")
 
