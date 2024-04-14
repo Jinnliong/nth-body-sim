@@ -10,15 +10,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Install Python 3.13
-      uses: actions/setup-python@v2
-      with:
-        python-version: 3.13
-
     - name: Set up Python
       uses: actions/setup-python@v2
       with:
-        python-version: 3.13
+        python-version: 3.8
         token: ${{ secrets.YOUR_GITHUB_TOKEN }}
 
     - name: Install dependencies
@@ -34,4 +29,3 @@ jobs:
       with:
         name: solar_sys_animation
         path: solar_sys.gif
-
