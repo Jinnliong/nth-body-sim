@@ -142,10 +142,10 @@ print("Animation Set Successfully!")
 ax.legend(loc="upper left", fontsize=14)
 
 # Create and run the animation with an appropriate number of frames
-ani = animation.FuncAnimation(fig, animate, frames=max(planet_frames.values()), interval=30, blit=True)
+ani = animation.FuncAnimation(fig, animate, frames=max(planet_frames.values()), interval=15, blit=True) # internal = 30ms is default speed, 15ms to double the playback.
 
 # Define the total number of frames
-total_frames = 2 * max(planet_frames.values())
+total_frames = 1 * max(planet_frames.values()) # To adjust total number of frame
 
 # Save the animation with progress indicator
 writer = PillowWriter(fps=24, metadata=dict(artist='Me'), bitrate=1800)

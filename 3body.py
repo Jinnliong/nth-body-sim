@@ -198,9 +198,23 @@ ani = animation.FuncAnimation(fig, animate, frames=len(time_span), interval=20, 
 # Add the legend
 ax.legend()
 
-# Save the animation
-ani.save("3body.gif", writer=PillowWriter(fps=24))
-print("GIF Saved Successfully!")
+# Define the total number of frames
+total_frames = 3 * len(time_span)
+
+# Save the animation with progress indicator
+writer = PillowWriter(fps=24, metadata=dict(artist='Me'), bitrate=1800)
+with writer.saving(fig, "3body.gif", dpi=100):  # Adjust dpi as needed
+    for i in range(total_frames):
+        # Update the progress indicator
+        print(f"Saving frame {i+1}/{total_frames} - {((i+1)/total_frames)*100:.2f}% complete", end="\r")
+
+        # Draw the frame
+        animate(i)
+
+        # Save the frame
+        writer.grab_frame()
+
+print("Animation Saved Successfully!")
 
 # Display the animation
 plt.show()
