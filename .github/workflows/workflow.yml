@@ -19,7 +19,11 @@ jobs:
           python-version: 3.9
           
       - name: Print Working Directory
-        run: pwd  
+        run: pwd
+
+      - uses: actions/checkout@v3
+        with:
+          clean: true
 
       - name: Install dependencies
         run: |
