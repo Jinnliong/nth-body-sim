@@ -10,18 +10,30 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Print Working Directory
+        run: pwd
+
       - name: Set up Python 3.9
         uses: actions/setup-python@v2
         with:
-          python-version: 3.9 
+          python-version: 3.9
+          
+      - name: Print Working Directory
+        run: pwd  
 
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -r requirements.txt 
+          pip install -r requirements.txt
+
+      - name: Print Working Directory
+        run: pwd  
 
       - name: Run animation script
         run: python workspace.py
+
+      - name: Print Working Directory
+        run: pwd  
 
       - name: Upload animation artifact
         uses: actions/upload-artifact@v2
