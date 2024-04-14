@@ -1,15 +1,12 @@
-import scipy.integrate
 import numpy as np
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 from matplotlib import animation
 from matplotlib.animation import PillowWriter
-import sys
-import time
 
-# Constants 
-G = 6.674e-11 # Gravitational constant
-M_sun = 1.989e30 # Mass of the Sun
+# Constants
+G = 6.674e-11  # Gravitational constant
+M_sun = 1.989e30  # Mass of the Sun
 
 # Planetary orbital parameters
 planet_params = {
@@ -17,29 +14,32 @@ planet_params = {
     "Venus": {"a": 108.2e9, "e": 0.0067, "T": 225 * 24 * 3600},
     "Earth": {"a": 149.6e9, "e": 0.0167, "T": 365.25 * 24 * 3600},
     "Mars": {"a": 227.9e9, "e": 0.0934, "T": 1.88 * 365.25 * 24 * 3600},
-    "Jupiter": {"a": 778.5e9, "e": 0.0489, "T": 11.86 * 365.25 * 24 * 3600}
+    "Jupiter": {"a": 778.5e9, "e": 0.0489, "T": 11.86 * 365.25 * 24 * 3600},
+    "Saturn": {"a": 1433.5e9, "e": 0.0557, "T": 29.46 * 365.25 * 24 * 3600},
+    "Uranus": {"a": 2872.5e9, "e": 0.0444, "T": 84.01 * 365.25 * 24 * 3600},
+    "Neptune": {"a": 4495.1e9, "e": 0.0112, "T": 164.8 * 365.25 * 24 * 3600}
 }
 
 # Number of frames for each planet's orbit
 planet_frames = {name: int(params["T"] / (24 * 3600)) for name, params in planet_params.items()}
 
 # Function to calculate Solar system stars' position at a given time
-def calculate_position(t, a, e, T): 
-    n = 2 * np.pi / T # Mean motion (specific to the planet)
-    M = n * t # Mean anomaly
+def calculate_position(t, a, e, T):
+    n = 2 * np.pi / T  # Mean motion (specific to the planet)
+    M = n * t  # Mean anomaly
 
-# Solve Kepler's equation iteratively 
+    # Solve Kepler's equation iteratively
     E = M
-    E_next = M + e * np.sin(E) # Eccentricity of the planet
-    while abs(E - E_next) > 1e-6: 
+    E_next = M + e * np.sin(E)  # Eccentricity of the planet
+    while abs(E - E_next) > 1e-6:
         E = E_next
         E_next = M + e * np.sin(E)
 
     true_anomaly = 2 * np.arctan2(np.sqrt(1 + e) * np.tan(E / 2), np.sqrt(1 - e))
-    r = a * (1 - e * np.cos(E)) # Semi-major axis of the planet
+    r = a * (1 - e * np.cos(E))  # Semi-major axis of the planet
 
     x = r * np.cos(true_anomaly)
-    y = 0 # Fix planets to the x-z plane
+    y = 0  # Fix planets to the x-z plane
     z = r * np.sin(true_anomaly)
 
     return x, y, z
@@ -68,25 +68,28 @@ ax.tick_params(colors='white')
 # Change the plot background color to black
 ax.set_facecolor('black')
 
-# Colors for planets 
+# Colors for planets
 colors = {
-    "Mercury": "darkorange", 
+    "Mercury": "darkorange",
     "Venus": "black",
-    "Earth": "deepskyblue", 
-    "Mars": "crimson", 
-    "Jupiter": "peachpuff" 
+    "Earth": "deepskyblue",
+    "Mars": "crimson",
+    "Jupiter": "peachpuff",
+    "Saturn": "gold",
+    "Uranus": "lightseagreen",
+    "Neptune": "dodgerblue"
 }
 
 # Color for the Sun
-sun_color = 'yellow'  
+sun_color = 'yellow'
 
 # Lines to represent the orbits (initialize with empty data)
 orbit_paths = {}
 planets = {}
 
 for name, params in planet_params.items():
-    orbit_paths[name], = ax.plot([], [], [], label=name, linewidth=1, linestyle='-', color=colors[name]) 
-    planets[name], = ax.plot([], [], [], 'o', markersize=4, color=colors[name]) 
+    orbit_paths[name], = ax.plot([], [], [], label=name, linewidth=1, linestyle='-', color=colors[name])
+    planets[name], = ax.plot([], [], [], 'o', markersize=4, color=colors[name])
 
 # Lists to store orbit history
 planet_positions = {name: ([], [], []) for name in planet_params}
@@ -109,14 +112,14 @@ def animate(i):
 
     for name, params in planet_params.items():
         x, y, z = calculate_position(i * params["T"] / planet_frames[name], params["a"], params["e"], params["T"])
-        x += sun_x # Planets move along with the Sun
+        x += sun_x  # Planets move along with the Sun
         y += sun_y
         z += sun_z
 
         orbit_paths[name].set_data(planet_positions[name][0] + [x], planet_positions[name][1] + [y])
         orbit_paths[name].set_3d_properties(planet_positions[name][2] + [z])
         planet_positions[name] = (planet_positions[name][0] + [x], planet_positions[name][1] + [y], planet_positions[name][2] + [z])
- 
+
         planets[name].set_data([x], [y])
         planets[name].set_3d_properties([z])
 
@@ -124,14 +127,14 @@ def animate(i):
     max_distance = max(planet_params[name]["a"] * (1 + planet_params[name]["e"]) for name in planet_params)
 
     # Set the buffer value (you can adjust this as needed)
-    buffer = 0.1 * max_distance # 20% buffer around the furthest planet
+    buffer = 0.1 * max_distance  # 20% buffer around the furthest planet
 
     # Set the viewing limits with the buffer
     ax.set_xlim(-max_distance - buffer, max_distance + buffer)
     ax.set_ylim(-max_distance - buffer, max_distance + buffer)
     ax.set_zlim(-max_distance - buffer, max_distance + buffer)
 
-    return [orbit_paths[name] for name in planet_params] + [planets[name] for name in planet_params] + [sun] 
+    return [orbit_paths[name] for name in planet_params] + [planets[name] for name in planet_params] + [sun]
 
 print("Animation Set Successfully!")
 
@@ -139,17 +142,23 @@ print("Animation Set Successfully!")
 ax.legend(loc="upper left", fontsize=14)
 
 # Create and run the animation with an appropriate number of frames
-ani = animation.FuncAnimation(fig, animate, frames=max(planet_frames.values()), interval=30, blit=True)
+ani = animation.FuncAnimation(fig, animate, frames=max(planet_frames.values()), interval=15, blit=True) # internal = 30ms is default speed, 15ms to double the playback.
 
 # Define the total number of frames
-total_frames = 3 * max(planet_frames.values())
+total_frames = 1 * max(planet_frames.values()) # To adjust total number of frame
 
-# Display the animation
-plt.show()
+# Save the animation with progress indicator
+writer = PillowWriter(fps=24, metadata=dict(artist='Me'), bitrate=1800)
+with writer.saving(fig, "solar_sys.gif", dpi=100):  # Adjust dpi as needed
+    for i in range(total_frames):
+        # Update the progress indicator
+        print(f"Saving frame {i+1}/{total_frames} - {((i+1)/total_frames)*100:.2f}% complete", end="\r")
 
-# Save the animation
-ani.save("solar_sys.gif", writer=PillowWriter(fps=24))
-print("GIF Save Attempted")
+        # Draw the frame
+        animate(i)
+
+        # Save the frame
+        writer.grab_frame()
 
 # Display the animation
 plt.show()

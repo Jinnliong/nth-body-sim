@@ -142,14 +142,14 @@ print("Animation Set Successfully!")
 ax.legend(loc="upper left", fontsize=14)
 
 # Create and run the animation with an appropriate number of frames
-ani = animation.FuncAnimation(fig, animate, frames=max(planet_frames.values()), interval=15, blit=True) # internal = 30ms is default speed, 15ms to double the playback.
+ani = animation.FuncAnimation(fig, animate, frames=max(planet_frames.values()), interval=100, blit=True) # internal = 30ms is default speed, 15ms to double the playback.
 
 # Define the total number of frames
 total_frames = 1 * max(planet_frames.values()) # To adjust total number of frame
 
 # Save the animation with progress indicator
 writer = PillowWriter(fps=24, metadata=dict(artist='Me'), bitrate=1800)
-with writer.saving(fig, "solar_sys.gif", dpi=100):  # Adjust dpi as needed
+with writer.saving(fig, "solar_sys.gif", dpi=50):  # Adjust dpi as needed
     for i in range(total_frames):
         # Update the progress indicator
         print(f"Saving frame {i+1}/{total_frames} - {((i+1)/total_frames)*100:.2f}% complete", end="\r")
