@@ -9,7 +9,7 @@ import time
 # Input Variables
 orbital_factor = 0.5
 distance_factor = 1
-skip_factor = 50  # Normal speed
+skip_factor = 100  # Normal speed
 
 # Constants 
 G = 6.674e-11  # Gravitational constant
@@ -435,7 +435,7 @@ start_time = time.time()
 
 # Save the animation with progress indicator
 writer = PillowWriter(fps=24, metadata=dict(artist='Me'), bitrate=1800)
-with writer.saving(fig, "solar_sys.gif", dpi=200):
+with writer.saving(fig, "solar_sys.gif", dpi=100):
     for i in range(total_frames):  # Loop adjusted for the new total_frames calculation
         animate(i)
         writer.grab_frame()
